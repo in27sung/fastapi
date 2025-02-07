@@ -1,0 +1,47 @@
+# macOS system files
+.DS_Store
+
+# PyCharm project files
+.idea/
+*.iml
+
+# Virtual environment directories (Anaconda, venv, etc.)
+venv/
+env/
+.env/
+__pycache__/
+
+# Python compiled files
+*.pyc
+*.pyo
+*.pyd
+
+# FastAPI specific files (database files, etc.)
+*.db
+*.sqlite3
+misc.xml
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Docker files (if used)
+*.log
+docker-compose.yml
+
+# Test coverage reports
+.coverage
+*.cover
+
+# Pipenv / Poetry virtual environments (if used)
+Pipfile.lock
+poetry.lock
+
+# Environment variables file
+.env
+
+# VS Code workspace settings
+.vscode/
+
+# Add any custom files you don't want to track here
+# For example, if you use custom config files like `.env` for local secrets
+# Add them below
