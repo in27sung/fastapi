@@ -1,6 +1,6 @@
 from typing import Union, Optional
 
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, status, HTTPException
 from fastapi.params import Body
 from pydantic import BaseModel
 from random import randrange
@@ -41,12 +41,7 @@ def get_posts():
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
-@app.post("/posts")
-# def create_post(payload: dict = Body(...)):
-#     print(payload)
-#     return {"new_post": f"title {payload['title']}",
-#             "content": f"{payload['content']}",
-#             "message": "Post created successfully"}
+@app.post("/posts", status_code=status.HTTP_201_CREATED)
 def create_post(post: Post):
     # print(post)
     # print(post.model_dump())
@@ -54,6 +49,11 @@ def create_post(post: Post):
     post_md['id'] = randrange(0, 100000)
     my_posts.append(post_md)
     return {"data": post_md}
+# def create_post(payload: dict = Body(...)):
+#     print(payload)
+#     return {"new_post": f"title {payload['title']}",
+#             "content": f"{payload['content']}",
+#             "message": "Post created successfully"}
 # title str, content str
 
 @app.get("/posts/latest")
@@ -62,11 +62,22 @@ def get_latest_post():
     # return {"latest_post": my_posts[len(my_posts) - 1]}
 
 @app.get("/posts/{post_id}")
-def get_post(post_id: int, response: Response):
+def get_post(post_id: int):
     post = find_post(post_id)
     if not post:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"message": "Post not found"}
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="Post not found")
+        # response.status_code = status.HTTP_404_NOT_FOUND
+        # return {"message": "Post not found"}
     return {"post_detail": post}
+
+@app.delete("/posts/{post_id}")
+def delete_post(post_id: int):
+    post = find_post(post_id)
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="Post not found")
+    my_posts.remove(post)
+    return {"message": "Post deleted successfully"}
 
 
