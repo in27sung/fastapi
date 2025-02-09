@@ -1,6 +1,6 @@
 from typing import Union, Optional
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status
 from fastapi.params import Body
 from pydantic import BaseModel
 from random import randrange
@@ -23,7 +23,6 @@ def find_post(post_id: int):
     for post in my_posts:
         if post['id'] == post_id:
             return post
-    return None
 
 ##
 # Union is used to specify that the function can return either a str or an int
@@ -57,7 +56,17 @@ def create_post(post: Post):
     return {"data": post_md}
 # title str, content str
 
+@app.get("/posts/latest")
+def get_latest_post():
+    return {"latest_post": my_posts[-1]}
+    # return {"latest_post": my_posts[len(my_posts) - 1]}
+
 @app.get("/posts/{post_id}")
-def get_post(post_id: int):
+def get_post(post_id: int, response: Response):
     post = find_post(post_id)
+    if not post:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"message": "Post not found"}
     return {"post_detail": post}
+
+
