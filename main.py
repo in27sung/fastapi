@@ -24,6 +24,11 @@ def find_post(post_id: int):
         if post['id'] == post_id:
             return post
 
+def find_index_post(post_id: int):
+    for i, p in enumerate(my_posts):
+        if p['id'] == post_id:
+            return i
+
 ##
 # Union is used to specify that the function can return either a str or an int
 # Decorator @app.get("/")
@@ -71,13 +76,18 @@ def get_post(post_id: int):
         # return {"message": "Post not found"}
     return {"post_detail": post}
 
-@app.delete("/posts/{post_id}")
+@app.delete("/posts/{post_id}", status_code=status.HTTP_200_OK)
 def delete_post(post_id: int):
-    post = find_post(post_id)
-    if not post:
+    # delete post from the list
+    # find the index of the post in the list
+    index = find_index_post(post_id)
+
+    if index is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Post not found")
-    my_posts.remove(post)
+
+    my_posts.pop(index)
+    # status code 200
     return {"message": "Post deleted successfully"}
-
-
+    # status code 204
+    # return Response(status_code=status.HTTP_204_NO_CONTENT)
