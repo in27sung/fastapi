@@ -91,3 +91,12 @@ def delete_post(post_id: int):
     return {"message": "Post deleted successfully"}
     # status code 204
     # return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+@app.put("/posts/{post_id}")
+def update_post(post_id: int, post: Post):
+    index = find_index_post(post_id)
+    if index is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="Post not found")
+    my_posts[index] = post.model_dump()
+    return {"message": "Post updated successfully"}
