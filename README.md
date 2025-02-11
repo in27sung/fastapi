@@ -18,3 +18,11 @@ Why We Need Schema?
 - FastAPI will also convert the data to the correct data type.
 - FastAPI will provide us with clear error messages.
 
+http status code:
+- 200: OK
+- 201: Created
+- 400: Bad Request
+- 404: Not Found
+- 422: Unprocessable Entity
+- 500: Internal Server Error
+- 503: Service Unavailable
